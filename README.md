@@ -1,2 +1,0 @@
-# azkar
-my project
