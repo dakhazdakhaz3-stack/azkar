@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>زیکرێن من</title>
+    <style>
+        /* ستایلێن سەرەکی یێن دۆخێ ڕووناهی (Light Mode) */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        
+        /* رێکخستنا بوتۆنێ و چوارچۆڤێ تەمامکرنێ دگەل ئێک */
+        .row-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 90%;
+            margin: 10px auto;
+        }
+        .complete-checkbox {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #29a613; /* رەنگێ سەوز بۆ نیشانا دروست */
+        }
+
+        .nav-btn {
+            flex-grow: 1;
+            padding: 12px 15px;
+            background-color: #29a613;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .nav-btn:hover {
+            background-color: #1e7a0e;
+        }
+
+        /* ستایلا تایبەت بۆ بوتونا زڤڕینێ و دۆخێ شەوێ */
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .back-btn {
+            background-color: #4a5568;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .back-btn:hover {
+            background-color: #b62313;
+        }
+        .dark-mode-btn {
+            background-color: #3182ce;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .dark-mode-btn:hover {
+            background-color: #ca0909;
+        }
+
+        .zikr-card {
+            display: none;
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 400px;
+            border-radius: 8px;
+            border-right: 5px solid #29a613;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
+            transition: background-color 0.3s;
+        }
+
+        /* ------------------ ستایلێن تایبەت بۆ دۆخێ شەوێ (Dark Mode CSS) ------------------ */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        body.dark-mode .container {
+            background-color: #1e1e1e;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .zikr-card {
+            background: #2a2a2a;
+            border-right: 5px solid #3ad120;
+            color: #ffffff;
+        }
+        body.dark-mode .zikr-card p {
+            color: #e0e0e0;
+        }
+        body.dark-mode hr {
+            background: #444 !important;
+        }
+        body.dark-mode .complete-checkbox {
+            accent-color: #3ad120;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- بەشێ بوتۆنێن سەرەکی (زڤڕین و دۆخێ شەوێ) -->
+    <div class="top-buttons">
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            زڤڕین ⬅️
+        </button>
+        <button id="themeToggleBtn" class="dark-mode-btn" onclick="toggleDarkMode()">
+            🌙
+        </button>
+    </div>
+
+    <hr style="border: 0; height: 1px; background: #eee; margin: 15px 0;">
+    <!-- ------------------ رێزبەندیا بوتۆنان دگەل نیشانا تەمامکرنێ ------------------ -->
+
+    <!-- ١. زکرێ رابوون ژ خەوێ -->
+    <div class="row-container">
+        <input type="checkbox" class="complete-checkbox" title="تەمام بوو">
+        <button class="nav-btn" onclick="toggleZikr('wakeup-card')">
+            ١. زکرێ رابوون ژ خەوێ 🌅
+        </button>
+    </div>
+
+    <!-- ٢. زکرێ دەستنڤێژێ -->
+    <div class="row-container">
+        <input type="checkbox" class="complete-checkbox" title="تەمام بوو">
+        <button class="nav-btn" onclick="toggleZikr('wudu-card')">
+            ٢. زکرێ دەستنڤێژێ 💧
+        </button>
+    </div>
+
+    <!-- ٣. زکرێ چوونێ بۆ مزگەفتێ -->
+    <div class="row-container">
+        <input type="checkbox" class="complete-checkbox" title="تەمام بوو">
+        <button class="nav-btn" onclick="toggleZikr('mosque-card')">
+            ٣. زکرێ چوونێ بۆ مزگەفتێ 🕌
+        </button>
+    </div>
+
+    <!-- ٤. زکرێن پشتی نڤێژێ -->
+    <div class="row-container">
+        <input type="checkbox" class="complete-checkbox" title="تەمام بوو">
+        <button class="nav-btn" onclick="toggleZikr('after-prayer-card')">
+            ٤. زکرێن پشتی نڤێژێ 📿
+        </button>
+    </div>
+
+    <!-- ٥. زکرێ دەرکەفتن ژ مزگەفتێ -->
+    <div class="row-container">
+        <input type="checkbox" class="complete-checkbox" title="تەمام بوو">
+        <button class="nav-btn" onclick="toggleZikr('mosque-exit-card')">
+            ٥. زکرێ دەرکەفتن ژ مزگەفتێ 🚪
+        </button>
+    </div>
+
+    <!-- ٦. زکرێ خەوێ -->
+    <div class="row-container">
+        <input type="checkbox" class="complete-checkbox" title="تەمام بوو">
+        <button class="nav-btn" onclick="toggleZikr('sleep-card')">
+            ٦. زکرێ خەوێ 🌙
+        </button>
+    </div>
+
+
+    <!-- ------------------ بەشێ کارتان (Cards) ------------------ -->
+
+    <!-- کارتا ١: زکرێ رابوون ژ خەوێ -->
+    <div id="wakeup-card" class="zikr-card" style="text-align: right; line-height: 1.8;">
+        <p><strong>الْحَمْدُ للهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ</strong></p>
+        <p style="color: #555; font-size: 14px;">سپاس بۆ وی خودایێ ئەم زیندووکرین پشتی ئەم مراندین (نڤاندین)، و زڤڕین هەر بۆ لایێ وی یە.</p>
+    </div>
+
+    <!-- کارتا ٢: زکرێ دەستنڤێژێ -->
+    <div id="wudu-card" class="zikr-card" style="text-align: right; line-height: 1.8;">
+        <p><strong>أَشْهَدُ أَنْ لَا إِلٰهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ</strong></p>
+        <p style="color: #555; font-size: 14px;">شەهادەتی ددەم کو چو خودایێن حەق نینن ژبلی خودێ... و محمد بەندە و پێغەمبەرێ وی یە.</p>
+    </div>
+
+    <!-- کارتا ٣: زکرێ چوونێ بۆ مزگەفتێ -->
+    <div id="mosque-card" class="zikr-card" style="text-align: right; line-height: 1.8;">
+        <p><strong>اللَّهُمَّ اجْعَلْ فِي قَلْبِي نُورًا، وَفِي لِسَانِي نُورًا، وَاجْعَلْ فِي سَمْعِي نُورًا، وَاجْعَلْ فِي بَصَرِي نُورًا...</strong></p>
+        <p style="color: #555; font-size: 14px; margin-bottom: 15px;">خودایێ من، ڕووناهیەکێ بکەیە د دلێ من دا، و د زمانێ من دا، و د بهیستنا من دا، و د دیتنا من دا...</p>
+        
+        <hr style="border: 0; height: 1px; background: #eee; margin: 15px 0;">
+        
+        <p style="color: #29a613; font-weight: bold; margin-bottom: 5px;">🚪 دەمێ چوونە ژوور بۆ ناڤ مزگەفتێ:</p>
+        <p><strong>بِسْمِ اللهِ، وَالصَّلَاةُ وَالسَّلَامُ عَلَى رَسُولِ اللهِ، اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِکَ</strong></p>
+        <p style="color: #555; font-size: 14px;">ب ناڤێ خودێ، و سڵاڤ و سەلات ل سەر نێردراوێ خودێ بن، خودایێ من دەرگەهێن ڕەحمەتا خۆ بۆ من ڤەکە.</p>
+    </div>
+
+    <!-- کارتا ٤: زکرێن پشتی نڤێژێ -->
+    <div id="after-prayer-card" class="zikr-card" style="text-align: right; line-height: 1.8;">
+        <p style="color: #29a613; font-weight: bold; margin-bottom: 5px;">📿 الاستغفار والتنزيه:</p>
+        <p><strong>أَسْتَغْفِرُ اللهَ (سێ جاران)<br>
+        اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْکَ السَّلَامُ، تَبَارَکْتَ يَا ذَا الْجَلَالِ وَالْإِکْرَامِ</strong></p>
+
+        <hr style="border: 0; height: 1px; background: #eee; margin: 15px 0;">
+        <p style="color: #29a613; font-weight: bold; margin-bottom: 5px;">🌌 آیة الکرسي:</p>
+        <p><strong>اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۚ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِم| عِندَهُ إِلَّا بِإِذْنِهِ...</strong></p>
+        
+        <hr style="border: 0; height: 1px; background: #eee; margin: 15px 0;">
+        
+        <p style="color: #29a613; font-weight: bold; margin-bottom: 5px;">📖 السُوَر الثلاث (الإخلاص، الفلق، الناس):</p>
+        <p><strong>قُلْ هُوَ اللَّهُ أَحَدٌ... قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ... قُلْ أَعُوذُ بِرَبِّ النَّاسِ...</strong></p>
+        
+        <hr style="border: 0; height: 1px; background: #eee; margin: 15px 0;">
+        
+        <p style="color: #29a613; font-weight: bold; margin-bottom: 5px;">📿 التسبيح والتحميد والتكبير:</p>
+        <p>• <strong>سُبْحَانَ ... (٣٣)</strong> | • <strong>اَلْحَمْدُ ... (٣٣)</strong> | • <strong>اَللهُ أَكْبَرُ ... (٣٣)</strong></p>
+        
+        <hr style="border: 0; height: 1px; background: #eee; margin: 15px 0;">
+        
+        <p style="color: #29a613; font-weight: bold; margin-bottom: 5px;">☝️ تەمامکرنا سەدێ (ئێک جار):</p>
+        <p><strong>لَا إِلٰهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ</strong></p>
+    </div>
+
+    <!-- کارتا ٥: زکرێ دەرکەفتن ژ مزگەفتێ -->
+    <div id="mosque-exit-card" class="zikr-card" style="text-align: right; line-height: 1.8;">
+        <p><strong>بِسْمِ اللهِ، وَالصَّلَاةُ وَالسَّلَامُ عَلَى رَسُولِ اللهِ، اللَّهُمَّ إِنِّي أَسْأَلُکَ مِنْ فَضْلِکَ</strong></p>
+        <p style="color: #555; font-size: 14px;">ب ناڤێ خودێ، و سڵاڤ و سەلات ل سەر نێردراوێ خودێ بن، خودایێ من ئەز داخوازا فەزڵ و کەرەما تە دکەم.</p>
+    </div>
+
+    <!-- کارتا ٦: زکرێ خەوێ -->
+    <div id="sleep-card" class="zikr-card" style="text-align: right; line-height: 1.8;">
+        <p><strong>بِاسْمِکَ اللَّهُمَّ أَمُوتُ وَأَحْیَا</strong></p>
+        <p style="color: #555; font-size: 14px;">ب ناڤێ تە خودایێ من، دمرم (د نڤم) و دبنەڤە زیندوو.</p>
+    </div>
+
+</div>
+
+<script>
+    // فۆنکشنا ڤەکرن و گرتنا کارتان
+    function toggleZikr(cardId) {
+        var cards = document.getElementsByClassName('zikr-card');
+        for (var i = 0; i < cards.length; i++) {
+            if (cards[i].id !== cardId) {
+                cards[i].style.display = 'none';
+            }
+        }
+        
+        var selectedCard = document.getElementById(cardId);
+        if (selectedCard.style.display === 'none' || selectedCard.style.display === '') {
+            selectedCard.style.display = 'block';
+        } else {
+            selectedCard.style.display = 'none';
+        }
+    }
+
+    // فۆنکشنا گۆڕینا دۆخێ شەوێ و ڕووناهیێ
+    function toggleDarkMode() {
+        var body = document.body;
+        body.classList.toggle('dark-mode');
+        
+        var btn = document.getElementById('themeToggleBtn');
+        if (body.classList.contains('dark-mode')) {
+            btn.innerHTML = 'دۆخێ ڕووناهی ☀️';
+            btn.style.backgroundColor = '#ecc94b'; // ڕەنگێ زەرد بۆ رۆژێ
+            btn.style.color = '#333';
+        } else {
+            btn.innerHTML = 'دۆخێ شەوێ 🌙';
+            btn.style.backgroundColor = '#3182ce'; // ڕەنگێ شین بۆ شەوێ
+            btn.style.color = 'white';
+        }
+    }
+</script>
+
+</body>
+</html>

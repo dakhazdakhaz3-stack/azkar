@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قورئانا پیرۆز</title>
+    <style>
+        body {
+            font-family: 'KFGQPC Uthman Taha Naskh', 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .back-btn {
+            background-color: #29a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .quran-box {
+            margin-top: 20px;
+        }
+        .quran-text-page {
+            line-height: 2.2;
+            font-size: 24px;
+            text-align: justify;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .loading {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="back-btn" onclick="window.location.href='index.html'">زڤڕین بۆ پەیجێ سەرەکی</button>
+    <h1>قورئانا پیرۆز</h1>
+
+    <select id="surahSelect" onchange="loadSurah(this.value)">
+        <option value="">-- سووڕەتەکێ هەلبژێره --</option>
+    </select>
+
+    <div id="quranContent" class="quran-box">
+        <p class="loading">...ژمارەیەکا خۆدێ بکە و سووڕەتەکێ دەستنیشان بکە</p>
+    </div>
+</div>
+
+<script>
+    async function loadSurahList() {
+        var select = document.getElementById("surahSelect");
+        try {
+            var res = await fetch("https://api.alquran.cloud/v1/surah");
+            var data = await res.json();
+            if (data.code === 200) {
+                data.data.forEach(function(surah) {
+                    var option = document.createElement("option");
+                    option.value = surah.number;
+                    option.textContent = surah.number + ". " + surah.name;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error("Error loading surah list:", error);
+        }
+    }
+
+    async function loadSurah(surahNumber) {
+        if (!surahNumber) return;
+        
+        var contentDiv = document.getElementById("quranContent");
+        contentDiv.innerHTML = "<p class='loading'>⏳ کۆمکرنا ئایەتان... چاوەڕێ بە</p>";
+        
+        try {
+            var resArabic = await fetch("https://api.alquran.cloud/v1/surah/" + surahNumber + "/ar.quran-uthmani");
+            var dataArabic = await resArabic.json();
+            
+            if (dataArabic.code === 200) {
+                var ayahs = dataArabic.data.ayahs;
+                var html = "<div class='quran-text-page'>";
+                
+                if (surahNumber != 1 && surahNumber != 9) {
+                    html += "<p style='text-align:center; font-size:26px; font-weight:bold; color:#29a; margin-bottom: 25px;'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>";
+                }
+                
+                html += "<p style='text-align: right; direction: rtl; font-size: 24px; line-height: 2.2; font-family: \"KFGQPC Uthman Taha Naskh\", \"Arial\", sans-serif;'>";
+                
+                ayahs.forEach(function(ayah) {
+                    var text = ayah.text;
+                    if (surahNumber != 1 && ayah.numberInSurah === 1 && text.startsWith("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ")) {
+                        text = text.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ", "");
+                    }
+                    html += text + " <span style='color: #29a; font-family: sans-serif; font-size: 18px;'>﴿" + ayah.numberInSurah + "﴾</span> ";
+                });
+                
+                html += "</p></div>";
+                contentDiv.innerHTML = html;
+            } else {
+                contentDiv.innerHTML = "<p class='loading'>خەلەتیەک چێبوو د بارکرنا سورەتێ دا.</p>";
+            }
+        } catch (error) {
+            contentDiv.innerHTML = "<p class='loading'>پەیوەندی ب سێرڤەری نەبوو، هێڵا ئینتەرنێتێ کۆنترۆڵ بکە.</p>";
+            console.error(error);
+        }
+    }
+
+    window.onload = loadSurahList;
+</script>
+
+</body>
+</html>
